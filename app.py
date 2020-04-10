@@ -48,7 +48,41 @@ def login():
 
 @app.route("/search",methods=["GET","POST"])
 def search():
-    return "Welcome user!"
+    my_username = request.form["user"]
+    
+    #curl
+    curl = mysql.connection.cursor()
+    curl.execute("SELECT * from users where username=(%s)",(my_username,))
+
+    #commit
+    mysql.connection.commit()
+
+    data = curl.fetchall()
+
+
+    curl.close()
+
+    objeto_usuario = data
+
+    if objeto_usuario and check_password_hash(objeto_usuario[0][2],request.form["password"]):
+        #creamos la sesion
+        session["username"] = objeto_usuario[0][1]
+
+
+        return render_template("index.html", user=data[0])
+
+    return redirect(url_for("login"))
+
+@app.route("/logout", methods=["GET","POST"])
+def logout():
+    session.pop("username",None) #pasamos none para evitar errores
+
+    return "You are logged out"
+
+
+@app.route("/", methods=["GET","POST"])
+def index():
+    return "Welcome to our shop!"
 
 if __name__ == "__main__":
     app.run(debug=True)

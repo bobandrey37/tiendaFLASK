@@ -15,7 +15,7 @@
 
     <h1>Formulario de Acceso</h1>
     
-    <form action=" {{ url_for('search') }}" method="GET" >
+    <form action=" {{ url_for('search') }}" method="POST" >
         <p><input type="text" name="user" placeholder="Usuario"></p>
         <p><input type="password" name="password" placeholder="Contraseña"></p>
         <p><input type="submit" value="Iniciar sesion" ></p>
