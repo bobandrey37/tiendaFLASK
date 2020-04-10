@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title -%} Pagina de registro {%- endblock %}
+
+{% block content -%}
+
+
+    {% with messages = get_flashed_messages(category_filter=["success"]) %}
+    {% if messages %}
+    {% for message in messages %}
+    <p class="success"> {{message}} </p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <h1>Formulario de Acceso</h1>
+    
+    <form action=" {{ url_for('search') }}" method="GET" >
+        <p><input type="text" name="user" placeholder="Usuario"></p>
+        <p><input type="password" name="password" placeholder="Contraseña"></p>
+        <p><input type="submit" value="Iniciar sesion" ></p>
+    </form>
+
+{%- endblock %}
