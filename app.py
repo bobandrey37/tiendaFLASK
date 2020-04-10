@@ -19,6 +19,11 @@ mysql = MySQL(app)
 app.secret_key = "mysecretkey" 
 
 #routing
+@app.route("/", methods=["GET","POST"])
+def index():
+    return "Welcome to our shop!"
+
+
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     
@@ -79,10 +84,52 @@ def logout():
 
     return "You are logged out"
 
+@app.route("/add_products",methods=["GET","POST"])
+def add_products():
+    return render_template("add_products.html")
 
-@app.route("/", methods=["GET","POST"])
-def index():
-    return "Welcome to our shop!"
+
+@app.route("/shopping", methods=["GET","POST"])
+def adding():
+    if(request.method == "POST"):
+
+        product = request.form["product"]
+        units = request.form["units"]
+        color = request.form["color"] 
+
+        #curl
+
+        curl = mysql.connection.cursor()
+        curl.execute("INSERT INTO products (product, units, color) VALUES (%s, %s, %s)",
+        (product, units, color))
+
+        #commit
+        mysql.connection.commit()
+
+        curl.close()
+
+        #mensaje entre vistas
+        flash("product added succesfully", "success")
+
+        return render_template("index.html")
+
+@app.route("/cart", methods=["GET", "POST"])
+def cart():
+
+        #curl
+        curl = mysql.connection.cursor()
+        curl.execute("SELECT * from products")
+
+        #commit
+        mysql.connection.commit()
+
+        data = curl.fetchall()
+
+        curl.close()
+
+        flash("mostrando carrito.. ", "success")
+
+        return render_template("add_products.html", products=data[0])
 
 if __name__ == "__main__":
     app.run(debug=True)

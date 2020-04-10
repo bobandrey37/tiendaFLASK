@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title -%} Pagina de gestion de productos {%- endblock %}
+
+{% block content -%}
+
+    {% with messages = get_flashed_messages(category_filter=["average"]) %}
+    {% if messages %}
+    {% for message in messages %}
+    <p class="average"> {{message}} </p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <h1>Formulario de venta </h1>
+    
+    <form action=" {{ url_for('adding') }}" method="POST" >
+        <p><input type="text" name="product" placeholder="Producto"></p>
+        <p><input type="text" name="units" placeholder="Unidades"></p>
+        <p><input type="text" name="color" placeholder="Color"></p>
+        <p><input type="submit" value="Enviar" ></p>
+    </form>
+
+    <table>
+        <thead>
+            <tr> <td>id</td> <td>Producto</td> <td>Unidades</td> <td>Color</td> </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{products.0}}</td>
+                    <td>{{products.1}}</td>
+                    <td>{{products.2}}</td>
+                    <td>{{products.3}}</td>
+    
+                    <td>
+                        <a href="/edit/{{product.0}}">Edit</a>
+                        <a href="/delete/{{product.0}}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{%- endblock %}
