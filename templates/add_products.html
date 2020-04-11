@@ -4,14 +4,6 @@
 
 {% block content -%}
 
-    {% with messages = get_flashed_messages(category_filter=["average"]) %}
-    {% if messages %}
-    {% for message in messages %}
-    <p class="average"> {{message}} </p>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
     <h1>Formulario de venta </h1>
     
     <form action=" {{ url_for('adding') }}" method="POST" >
@@ -28,10 +20,10 @@
         <tbody>
             {% for product in products %}
                 <tr>
-                    <td>{{products.0}}</td>
-                    <td>{{products.1}}</td>
-                    <td>{{products.2}}</td>
-                    <td>{{products.3}}</td>
+                    <td>{{product.0}}</td>
+                    <td>{{product.1}}</td>
+                    <td>{{product.2}}</td>
+                    <td>{{product.3}}</td>
     
                     <td>
                         <a href="/edit/{{product.0}}">Edit</a>

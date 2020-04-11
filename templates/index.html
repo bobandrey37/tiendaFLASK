@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title -%} Pagina de registro {%- endblock %}
+{% block title %} Pagina principal {% endblock %}
 
-{% block content -%}
+{% block content %}
 
-    <p>Welcome to our shop dear {{ user.1 }} </p>
+    <h1>Welcome back {{user}}</h1>
 
     <ul>
         <li>  <a href="/add_products">Comprar</a> </li>
         <li>  <a href="/cart">Ver Carrito</a> </li>
     </ul>
 
-{%- endblock %}
+{% endblock %}
