@@ -24,6 +24,15 @@ app.secret_key = 'mysecretkey'
 def index():
     return 'Welcome to our shop!'
 
+
+@app.route('/show', methods=['GET','POST'])
+def show():
+    curl = mysql.connection.cursor()
+    curl.execute('SELECT * from products')
+    data = curl.fetchall()
+
+    return render_template("add_products.html", products = data)
+
 @app.route('/signup', methods=['GET','POST'])
 def signup():
     
@@ -76,7 +85,8 @@ def search():
 
         return render_template("index.html",user=objeto_usuario[0][1])
 
-    return redirect(url_for('login'))
+    flash('user not found','error')
+    return redirect(url_for('signup'))
 
 
 
@@ -87,15 +97,50 @@ def logout():
 
     return redirect(url_for('index'))
 
-@app.route('/home')
+@app.route('/home', methods=['GET','POST'])
 def home():
 
-    if 'username' in session:
+    if request.method == 'POST':
 
-        return render_template('index.html')
+        if 'username' in session:
+
+            return render_template('index.html')
 
     flash('You must log in first to access shopping page!','error')
     return redirect(url_for('login'))
+    
+
+@app.route('/shop', methods=["GET","POST"])
+def shop():
+    return render_template('form.html')
+
+@app.route('/add', methods=["GET","POST"])
+def add():
+     if request.method == "POST":
+
+        product = request.form["product"]
+        units = request.form["units"]
+        color = request.form["color"] 
+
+        #curl
+
+        curl = mysql.connection.cursor()
+        curl.execute("INSERT INTO products (product, units, color) VALUES (%s, %s, %s)",
+        (product, units, color))
+
+        #commit
+        mysql.connection.commit()
+
+        data = curl.fetchall()
+
+        print(data)
+
+        curl.close()
+
+        #mensaje entre vistas
+        flash("product added succesfully", "success")
+
+        return render_template('index.html')
 
 
 if __name__ == '__main__':

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Pagina de gestion de productos {% endblock %}
+
+{% block content %}
+
+    <h1>Formulario de venta </h1>
+    
+    <form action=" {{ url_for('add') }}" method="POST" >
+        <p><input type="text" name="product" placeholder="Producto"></p>
+        <p><input type="text" name="units" placeholder="Unidades"></p>
+        <p><input type="text" name="color" placeholder="Color"></p>
+        <p><input type="submit" value="Enviar" ></p>
+    </form>
+
+{% endblock %}
