@@ -78,6 +78,8 @@ def search():
 
     return redirect(url_for('login'))
 
+
+
 @app.route('/logout', methods=["GET","POST"])
 def logout():
 
@@ -94,6 +96,7 @@ def home():
 
     flash('You must log in first to access shopping page!','error')
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
