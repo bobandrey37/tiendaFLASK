@@ -143,5 +143,51 @@ def add():
         return render_template('index.html')
 
 
+@app.route('/delete/<string:id>',methods = ["POST","GET"])
+def delete_product(id):
+
+        #curl
+        curl = mysql.connection.cursor()
+        curl.execute('DELETE from products where id={0}'.format(id))
+
+        #commit
+        mysql.connection.commit()
+
+        curl.close()
+
+        #mensaje entre vistas
+        flash('product deleted succesfully','warning')
+
+        return redirect(url_for('show'))
+
+@app.route("/edit/<string:id>",methods = ["POST","GET"])
+def edit_product(id):
+    curl = mysql.connection.cursor()
+    curl.execute("SELECT * FROM products where id = {0}".format(id))
+    data = curl.fetchall()
+
+    return render_template('edit-products.html', product = data[0])
+
+
+@app.route("/update/<string:id>", methods = ["POST","GET"])
+def update_product(id):
+
+    if request.method == "POST":
+        product = request.form['product']
+        units = request.form['units']
+        color = request.form['color']
+
+        curl = mysql.connection.cursor()
+        curl.execute("""
+            UPDATE products
+            SET product = %s,
+                units = %s,
+                color = %s
+            WHERE id = %s
+        """, (product, units, color, id))
+        mysql.connection.commit()
+        flash('Product Updated Successfully','success')
+    return redirect(url_for("show"))
+
 if __name__ == '__main__':
     app.run(debug=True)
